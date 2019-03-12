@@ -1,5 +1,7 @@
 HELP.md
-/target/
+mvnw
+mvnw.cmd
+target
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
@@ -8,6 +10,7 @@ HELP.md
 .factorypath
 .project
 .settings
+.mvn
 .springBeans
 .sts4-cache
 

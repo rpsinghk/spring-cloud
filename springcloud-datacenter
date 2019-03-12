@@ -1,0 +1,51 @@
+#!/bin/bash
+
+function call_docker(){
+    local action=$1
+    local dockercompose="docker-compose -f"
+    echo "File in use : $fn"
+
+    case "$action" in
+        "start")
+            $dockercompose $fn up --no-start && $dockercompose $fn start
+
+            $dockercompose  $fn ps 
+
+            echo "start"
+            ;;
+        "stop")
+            $dockercompose $fn down
+            ;;
+        "logs")
+            $dockercompose $fn logs -f
+            ;;
+        "ps")
+            $dockercompose $fn ps
+            ;;
+        "top")
+            $dockercompose $fn top
+            ;;
+        "exec")
+            local service=$2
+            shift 2
+            $dockercompose $fn exec $service $@
+            ;;
+        *)
+            echo "Usage:"
+            echo "  1. ${cmdline} start"
+            echo "  2. $cmdline stop"
+            echo "  3. $cmdline logs"
+            echo "  4. $cmdline ps"
+            echo "  5. $cmdline top"
+            echo "  6. $cmdline exec"
+            
+            ;; 
+    esac    
+}
+
+
+fn="docker-compose-springcloud-datacenter.yml"
+cmdline="springcloud-datacenter"
+call_docker $@
+
+

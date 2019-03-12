@@ -1,0 +1,80 @@
+version: '3'
+networks:
+  vpnbd:
+    driver: bridge
+    ipam:
+      config:
+          - subnet: 172.27.0.0/16
+
+services:
+  config:
+    image: springcloud/config:latest
+    hostname: config
+    container_name: springcloud-config
+    networks:
+      vpnbd:
+  discovery:
+    image: springcloud/discovery:latest
+    hostname: discovery
+    container_name: springcloud-discovery
+    depends_on:
+      - config
+#    command: bash -c 'sleep 120  && /docker-entrypoint.sh'
+    networks:
+      vpnbd:
+  bookservice:
+    image: springcloud/book-service:latest
+    hostname: bookservice
+    container_name: springcloud-bookservice
+    depends_on:
+      - config
+      - discovery
+#    command: bash -c 'sleep 120  && /docker-entrypoint.sh'
+    networks:
+      vpnbd:
+  ratingservice:
+    image: springcloud/rating-service:latest
+    hostname: ratingservice
+    container_name: springcloud-ratingservice
+    depends_on:
+      - config
+      - discovery
+      - bookservice
+#    command: bash -c 'sleep 120  && /docker-entrypoint.sh'
+    networks:
+      vpnbd:
+  gateway:
+    image: springcloud/gateway:latest
+    hostname: gateway
+    container_name: springcloud-gateway
+    depends_on:
+      - config
+      - discovery
+      - bookservice
+      - ratingservice
+    ports:
+      - "9080:9080"
+#    command: bash -c 'sleep 120  && /docker-entrypoint.sh'
+    networks:
+      vpnbd:
+  turbine:
+    image: springcloud/turbine:latest
+    hostname: turbine
+    container_name: springcloud-turbine
+    depends_on:
+      - config
+      - discovery
+#    command: bash -c 'sleep 120  && /docker-entrypoint.sh'
+    networks:
+      vpnbd:
+  zipkin:
+    image: springcloud/zipkin:latest
+    hostname: zipkin
+    container_name: springcloud-zipkin
+    depends_on:
+      - config
+      - discovery
+#    command: bash -c 'sleep 120  && /docker-entrypoint.sh'
+    networks:
+      vpnbd:
+
