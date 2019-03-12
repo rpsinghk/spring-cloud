@@ -1,0 +1,38 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Good Thymes Virtual Grocery</title>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type"></meta>
+
+<link rel="stylesheet" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css"></link>
+</head>
+<body>
+
+	<nav class="navbar navbar-light bg-info">THYMELEAF</nav>
+
+	<div class="container">
+		Welcome Messages:
+		<div class="row">
+			<div class="col-sm">
+				<p th:text="#{index.welcome}">Welcome to our grocery store!</p>
+				<p th:utext="#{index.uwelcome}">Welcome to our grocery store!</p>
+			</div>
+			<div class="col-sm">
+				<p th:text="${#locale}"></p>
+				<p th:text="${#httpServletRequest}"></p>
+			</div>
+		</div>
+		<div class="row">
+				<div style="display: table;">
+				    <div th:each="name : ${(#ctx).getVariableNames()}"style="display: table-row;border-bottom-style: solid;border-bottom-color: white;" >
+				      	<div th:text="${name}" style="display: table-cell;  width: 20%;" class="d-inline p-2">Context Name</div>
+						<div th:text="${(#ctx).getVariable(name)}" style="display: table-cell;" >Context Value</div>
+				    </div>
+				</div>
+			</div>
+	</div>
+
+	<script type="text/javascript" src="/webjars/jquery/3.3.1-2/jquery.min.js"></script>
+	<script type="text/javascript" src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>
