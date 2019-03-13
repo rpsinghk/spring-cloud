@@ -1,0 +1,5 @@
+armeria:
+  ports:
+  - port: 9090
+    protocols:
+    - http
