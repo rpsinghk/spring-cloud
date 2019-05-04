@@ -22,20 +22,22 @@
 			</div>
 		</div>
 		<div class="row">
-			<div>Today's Date : 
-					<span th:if="${'todayDate' instanceof T(java.util.Date)}"> 				
-						<label th:text="${#calendars.format(todayDate,'dd MMMM yyyy')}">Today's Date</label>
+			<div> 
+					<span th:if="${'todayDate' instanceof T(java.util.Date)}"> 		
+						<label for="d1">Today's Date :</label>		
+						<input id="d1" type="date" name="d1" th:text="${#calendars.format(todayDate,'dd MMMM yyyy')}"></input>
 					</span>
 					<span th:if="${'todayDate' instanceof T(java.lang.String)}">
-						<label th:text="${todayDate}">Today's Date</label>
+						<label for="d2">Today's Date :</label>
+						<input type="date" id="d2" name="d2" th:text="${todayDate}"></input>
 					</span>
 			</div>
 			Established locale country: <span th:text="${#locale.country}">US</span>.
 
 			<p th:text="${(#ctx).getClass()}"></p>
 			<span th:text="${(#vars).getClass()}"></span>
-
-
+		</div>
+		<div class="row">
 			<form class="form-inline" action="#" th:action="@{/date}" th:object="${person}">
 				<div class="input-group mb-3">
 					<div class="input-group-prepend">
@@ -51,7 +53,6 @@
 				</div>
 				<button type="submit" class="btn btn-primary mb-2">Send Date</button>
 			</form>
-
 		</div>
 	</div>
 
