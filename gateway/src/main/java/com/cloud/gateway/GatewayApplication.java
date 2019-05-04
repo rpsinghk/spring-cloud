@@ -7,6 +7,8 @@ import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboar
 import org.springframework.cloud.netflix.turbine.EnableTurbine;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
+import lombok.extern.slf4j.Slf4j;
+
 @SpringBootApplication
 @EnableZuulProxy
 @EnableEurekaClient
@@ -15,11 +17,6 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 public class GatewayApplication {
 
 	public static void main(String[] args) {
-		try {
-			Thread.currentThread();
-			Thread.sleep(10000);
-		}catch(Exception e) {}
-
 		SpringApplication.run(GatewayApplication.class, args);
 	}
 

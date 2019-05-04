@@ -15,19 +15,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
+
 @EnableEurekaClient
 @RestController
 @SpringBootApplication
 @RequestMapping("/ratings")
 @EnableHystrix
+@Slf4j
 public class RatingServiceApplication {
 
 	public static void main(String[] args) {
-		try {
-			Thread.currentThread();
-			Thread.sleep(10000);
-		}catch(Exception e) {}
-
 		SpringApplication.run(RatingServiceApplication.class, args);
 	}
 
@@ -38,13 +36,15 @@ public class RatingServiceApplication {
             new Rating(4L, 2L, 5)
         );
      
-        @GetMapping("")
+        @GetMapping("/{bookId}")
         public List<Rating> findRatingsByBookId(@RequestParam Long bookId) {
+        	log.info("rating list %s",bookId);
             return bookId == null || bookId.equals(0L) ? Collections.emptyList() : ratingList.stream().filter(r -> r.getBookId().equals(bookId)).collect(Collectors.toList());
         }
      
         @GetMapping("/all")
         public List<Rating> findAllRatings() {
+        	log.info("All rating");
             return ratingList;
         }
     }
