@@ -1,0 +1,57 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: spring-cloud
+  annotations:
+    kompose.cmd: kompose -f docker-compose-springcloud-datacenter.yml convert
+    kompose.version: 1.18.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: config
+    name: config
+  name: config
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: config
+    spec:
+      containers:
+      - image: springcloud/config:latest
+        imagePullPolicy: Never
+        name: springcloud-config
+        resources: {}
+      hostname: config
+      restartPolicy: Always
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: spring-cloud
+  annotations:
+    kompose.cmd: kompose -f docker-compose-springcloud-datacenter.yml convert
+    kompose.version: 1.18.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: config
+    name: config
+  name: config
+spec:
+  selector:
+    io.kompose.service: config
+  ports:
+  - name: "config"
+    port: 9081
+    targetPort: 9081
+status:
+  loadBalancer: {}

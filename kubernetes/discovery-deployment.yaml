@@ -1,0 +1,58 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: spring-cloud
+  annotations:
+    kompose.cmd: kompose -f docker-compose-springcloud-datacenter.yml convert
+    kompose.version: 1.18.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: discovery
+    name: config
+  name: discovery
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: discovery
+        uses: discovery
+    spec:
+      containers:
+      - image: springcloud/discovery:latest
+        imagePullPolicy: Never
+        name: springcloud-discovery
+        resources: {}
+      hostname: discovery
+      restartPolicy: Always
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: spring-cloud
+  annotations:
+    kompose.cmd: kompose -f docker-compose-springcloud-datacenter.yml convert
+    kompose.version: 1.18.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: discovery
+    run: discovery
+  name: discovery
+spec:
+  ports:
+  - name: "discovery"
+    port: 9082
+    targetPort: 9082
+  selector:
+    io.kompose.service: discovery
+status:
+  loadBalancer: {}

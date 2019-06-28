@@ -1,0 +1,62 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: spring-cloud
+  annotations:
+    kompose.cmd: kompose -f docker-compose-springcloud-datacenter.yml convert
+    kompose.version: 1.18.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: bookservice
+    name: bookservice
+  name: bookservice
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: bookservice
+        name: bookservice
+        uses: bookservice
+      name: bookservice
+    spec:
+      containers:
+      - image: springcloud/book-service:latest
+        imagePullPolicy: Never
+        name: springcloud-bookservice
+        resources: {}
+      hostname: bookservice
+      restartPolicy: Always
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: spring-cloud
+  annotations:
+    kompose.cmd: kompose -f docker-compose-springcloud-datacenter.yml convert
+    kompose.version: 1.18.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: bookservice
+    name: bookservice
+    run: bookservice
+  name: bookservice
+spec:
+  selector:
+    io.kompose.service: bookservice
+    name: bookservice
+  ports:
+  - name: "config"
+    port: 9081
+    targetPort: 9081
+status:
+  loadBalancer: {}

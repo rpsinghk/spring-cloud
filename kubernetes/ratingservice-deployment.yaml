@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: spring-cloud
+  annotations:
+    kompose.cmd: kompose -f docker-compose-springcloud-datacenter.yml convert
+    kompose.version: 1.18.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ratingservice
+  name: ratingservice
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ratingservice
+    spec:
+      containers:
+      - image: springcloud/rating-service:latest
+        imagePullPolicy: Never
+        name: springcloud-ratingservice
+        resources: {}
+      hostname: ratingservice
+      restartPolicy: Always
+status: {}
