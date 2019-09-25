@@ -5,14 +5,35 @@ networks:
     ipam:
       config:
           - subnet: 172.27.0.0/16
-
+configs:
+  my_config:
+    file: ./my_config.txt
+  my_other_config:
+    external: true
 services:
   config:
     image: springcloud/config:latest
     hostname: config
     container_name: springcloud-config
+    env_file:
+      - ./common.env
+      - ./apps/web.env
+      - /opt/secrets.env
     networks:
       vpnbd:
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+    configs:
+      - my_config
+      - my_other_config
   discovery:
     image: springcloud/discovery:latest
     hostname: discovery
